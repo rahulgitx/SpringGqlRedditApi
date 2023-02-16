@@ -1,4 +1,4 @@
-package com.keyholesoftware.lambda.rest;
+package com.keyholesoftware.lambda.model;
 
 
 

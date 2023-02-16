@@ -1,4 +1,5 @@
-package com.keyholesoftware.lambda.rest;
+package com.keyholesoftware.lambda.controllers;
+
 
 
 import java.time.LocalDateTime;
@@ -18,27 +19,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.keyholesoftware.lambda.model.TradingDataEntity;
+
 
 
 //import net.javaguides.springbootbackend.exception.ResourceNotFroundException;
 
 @RestController
-public class Controller {
+@RequestMapping("/api/")
+public class ApiController {
 	  private final RestTemplate restTemplate;
 	  private final HttpHeaders headers;
 	  
-	  @Autowired
-	  private TradeRepository tradeRepo;
-	  
 	  TradingDataEntity[] tasks;
 	  
-	  public Controller() {
+	  public ApiController() {
 		    this.restTemplate = new RestTemplate();
 		    headers = new HttpHeaders();
 		    headers.setContentType(MediaType.APPLICATION_JSON);
@@ -50,7 +52,7 @@ public class Controller {
 		return "https://tradestie.com/api/v1/apps/reddit" + path;	
 	}
 
-	@GetMapping("/api/tickers")
+	@GetMapping("tickers")
 	public ResponseEntity allTasks() {
 		  HttpEntity<TradingDataEntity> request = new HttpEntity<>(headers);
 		  String url = generateUrl("");
@@ -63,7 +65,7 @@ public class Controller {
 		  return ResponseEntity.ok().body(tasks);
 	}
 	
-	@GetMapping("/api/tickers/{tickerName}")
+	@GetMapping("tickers/{tickerName}")
 	public TradingDataEntity getTicker(@PathVariable String tickerName) {
 
 		for(TradingDataEntity t: tasks) {
@@ -74,7 +76,7 @@ public class Controller {
 		return null;
 	}
 	
-	@GetMapping("/api/tickers/date/{date}")
+	@GetMapping("tickers/date/{date}")
 	public ResponseEntity getTickerDate(@PathVariable String date) { 
 		HttpEntity<TradingDataEntity> request = new HttpEntity<>(headers);
 		String s = "?date="+date;String url = generateUrl(s);
@@ -85,7 +87,7 @@ public class Controller {
 		return ResponseEntity.ok().body(dateTicker);
 	}
 
-	@PutMapping("/api/tickers/{tickerName}")
+	@PutMapping("tickers/{tickerName}")
 	public TradingDataEntity updateTicker(@PathVariable String tickerName ,@RequestBody TradingDataEntity trade) {
 		List<TradingDataEntity> tickerData = new ArrayList<>();
 		for(TradingDataEntity t: tasks) {
@@ -97,7 +99,7 @@ public class Controller {
 		return null;
 	}
 	
-	@PostMapping("/api/tickers")
+	@PostMapping("tickers")
 	public List<TradingDataEntity> addTicker(@RequestBody TradingDataEntity trade) {
 		List<TradingDataEntity> n = new ArrayList<>();
 		for(int i=0 ; i<tasks.length ; i++) {
@@ -110,65 +112,6 @@ public class Controller {
 	}
 	
 	
-	// ***********************DATABASE***************************
 	
-	@GetMapping("/db/tickers")
-	public @ResponseBody Iterable<TradingDataEntity> getAllUsers() {
-		System.out.println("Trying to reach db");
-		System.out.println("SAving data from api into db");
-		
-//		tradeRepo.deleteAll();
-		
-		 HttpEntity<TradingDataEntity> request = new HttpEntity<>(headers);
-		 String url = generateUrl("");
-		
-		 ResponseEntity<TradingDataEntity[]> result = restTemplate.exchange(url, HttpMethod.GET, request, TradingDataEntity[].class);
-		 tasks = result.getBody();
-		 
-		 for(TradingDataEntity t:tasks) {
-			 tradeRepo.save(t);
-		 }
-		
-
-		return tradeRepo.findAll();
-
-	}
-	
-	@GetMapping("/db/tickers/id/{id}")
-	public Optional<TradingDataEntity> getData(@PathVariable int id){
-		return tradeRepo.findById(id);
-	}
-	
-	
-	// insert a new entry
-	@PostMapping("/db/tickers")
-	public ResponseEntity<Void> addTradingData(@RequestBody TradingDataEntity[] data){
-		System.out.println("Trying to add: ");
-		System.out.println(data);
-		
-		
-		for(TradingDataEntity t:data) {
-			tradeRepo.save(t);
-		}
-//		tradeRepo.save(data);
-		ResponseEntity<Void> re = new ResponseEntity<>(HttpStatus.CREATED);
-		return re;
-	}
-	
-	
-    @PutMapping("/db/tickers/update/{id}")
-    public ResponseEntity<TradingDataEntity> updateData(@PathVariable int id, @RequestBody TradingDataEntity newData){
-        Optional<TradingDataEntity> Tdata= tradeRepo.findById(id);
-        TradingDataEntity UpdatedData = Tdata.get();
-        UpdatedData.setId(newData.getId());
-        UpdatedData.setNo_of_comments(newData.getNo_of_comments());
-        UpdatedData.setSentiment(newData.getSentiment());
-        UpdatedData.setSentiment_score(newData.getSentiment_score());
-        UpdatedData.setTicker(newData.getTicker());
-
-        tradeRepo.save(UpdatedData);
-
-        return ResponseEntity.ok(UpdatedData);
-    }
 
 }
