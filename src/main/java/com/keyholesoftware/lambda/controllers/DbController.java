@@ -63,7 +63,7 @@ public class DbController {
 	  }
 	  
 		private String generateUrl(String path) {
-			return "https://tradestie.com/api/v1/apps/reddit" + path;	
+			return "https://1c6o01ldm2.execute-api.ap-south-1.amazonaws.com/Stage/tickers" + path;	
 		}
 	
 		@GetMapping("tickers")
@@ -76,13 +76,11 @@ public class DbController {
 			
 			 ResponseEntity<TradingDataEntity[]> result = restTemplate.exchange(url, HttpMethod.GET, request, TradingDataEntity[].class);
 			 tasks = result.getBody();
-//			 TradingDataService tradeServ = new TradingDataService();
 
 			 for(TradingDataEntity t:tasks) {
 				 
 				 tradeServ.saveAll(t);    // saving in TradingDataEntity table
-				 
-//				 SymbolService symbServ = new SymbolService();
+
 				 symbServ.saveAll(t);  // saving in ticker symbol as well as ticker sentiment
 			 }
 			

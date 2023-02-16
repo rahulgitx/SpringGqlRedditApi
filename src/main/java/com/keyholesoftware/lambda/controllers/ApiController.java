@@ -49,7 +49,7 @@ public class ApiController {
 	  }
 
 	private String generateUrl(String path) {
-		return "https://tradestie.com/api/v1/apps/reddit" + path;	
+		return "https://1c6o01ldm2.execute-api.ap-south-1.amazonaws.com/Stage/tickers" + path;	
 	}
 
 	@GetMapping("tickers")

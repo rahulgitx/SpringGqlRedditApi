@@ -52,11 +52,14 @@
 
 
 
+<!--
     <dependency>
     	<groupId>com.Incedo</groupId>
     	<artifactId>AWSdemo</artifactId>
     	<version>0.0.1-SNAPSHOT</version>
     </dependency>
+    
+    -->
   </dependencies>
 
   <profiles>
@@ -86,7 +89,7 @@
           <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-shade-plugin</artifactId>
-            <version>2.3</version>
+            <version>3.2.4</version>
             <configuration>
               <createDependencyReducedPom>false</createDependencyReducedPom>
             </configuration>
