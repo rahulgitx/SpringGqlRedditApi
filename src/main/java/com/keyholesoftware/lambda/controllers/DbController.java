@@ -82,6 +82,8 @@ public class DbController {
 				 tradeServ.saveAll(t);    // saving in TradingDataEntity table
 
 				 symbServ.saveAll(t);  // saving in ticker symbol as well as ticker sentiment
+				 
+				 sentServ.saveAll(t);
 			 }
 			
 			 return tradeServ.getAllProperties();
@@ -128,7 +130,9 @@ public class DbController {
 		@GetMapping("tickers/ticker_sentiment/{id}")
 		public SymbolAndSentiment getSentiment(@PathVariable int id){
 //			SentimentService sentServ = new SentimentService();
+//			System.out.println("trying");
 			Optional<TickerSentiment> sentObj = sentServ.getById(id);
+//			System.out.println("sentiment found");
 			Optional<TickerSymbol> symbObj = symbServ.getById(id);
 			SymbolAndSentiment combined = new SymbolAndSentiment();
 			combined.setIdAndName(symbObj);

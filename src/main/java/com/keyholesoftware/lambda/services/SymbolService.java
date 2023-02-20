@@ -14,7 +14,6 @@ import com.keyholesoftware.lambda.repositories.SymbolRepository;
 @Service
 public class SymbolService{
 	private TickerSymbol SymbObj = new TickerSymbol();
-	private TickerSentiment temp = new TickerSentiment();
 	
 	@Autowired
 	private SymbolRepository symbolRepo;
@@ -23,10 +22,11 @@ public class SymbolService{
 		 SymbObj.setTicker(t.getTicker());
 		 SymbObj.setId(t.getId());
 
-		 temp.setSentiment(t.getSentiment());
-		 temp.setID(t.getId());
-		 temp.setSentiment_score(t.getSentiment_score());
-
+//		 temp.setSentiment(t.getSentiment());
+//		 temp.setID(t.getId());
+//		 temp.setSentiment_score(t.getSentiment_score());
+//		 
+//
 		 symbolRepo.save(SymbObj);
 //		 return SymbObj;
 	}
